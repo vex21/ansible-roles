@@ -1,0 +1,28 @@
+---
+- name: Enable remi-php71
+  command: yum-config-manager --enable remi-php71
+  
+- name: Upgrade all packages again
+  package: name=* state=latest update_cache=yes
+  
+- name:  Install webserver packages
+  yum: name={{ item }} state=present
+  with_items: 
+    - mc
+    - links
+    - wget
+    - php
+    - php-cli
+    - php-common
+    - php-devel
+    - php-gd
+    - php-ldap
+    - php-mbstring
+    - php-mcrypt
+    - php-mysql
+    - php-mcrypt
+    - php-pdo
+    - php-pear
+    - php-pecl-apc
+    - php-process
+    - php-xml
