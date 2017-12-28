@@ -5,12 +5,9 @@
 - name: Upgrade all packages again
   package: name=* state=latest update_cache=yes
   
-- name:  Install webserver packages
+- name:  Install php packages
   yum: name={{ item }} state=present
   with_items: 
-    - mc
-    - links
-    - wget
     - php
     - php-cli
     - php-common
