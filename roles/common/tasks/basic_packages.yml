@@ -6,3 +6,4 @@
     - links
     - wget
     - htop
+    - yum-utils
