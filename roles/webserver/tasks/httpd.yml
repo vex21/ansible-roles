@@ -1,5 +1,5 @@
 ---
 - name:  Install webserver packages
-  yum: name={{ item }} state=present
-  with_items: 
-    - httpd
+  yum: 
+    name: ['httpd']
+    state: present

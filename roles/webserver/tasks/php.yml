@@ -1,25 +1,11 @@
 ---
-- name: Enable remi-php71
-  command: yum-config-manager --enable remi-php71
+- name: Enable remi-php72
+  command: yum-config-manager --enable remi-php72
   
 - name: Upgrade all packages again
   package: name=* state=latest update_cache=yes
   
 - name:  Install php packages
-  yum: name={{ item }} state=present
-  with_items: 
-    - php
-    - php-cli
-    - php-common
-    - php-devel
-    - php-gd
-    - php-ldap
-    - php-mbstring
-    - php-mcrypt
-    - php-mysql
-    - php-mcrypt
-    - php-pdo
-    - php-pear
-    - php-pecl-apc
-    - php-process
-    - php-xml
+  yum: 
+    name: ['php', 'php-cli', 'php-common', 'php-devel', 'php-gd', 'php-ldap', 'php-mbstring', 'php-mcrypt', 'php-mysql', 'php-mcrypt', 'php-pdo', 'php-pear', 'php-pecl-apc', 'php-process', 'php-xml']
+    state: present

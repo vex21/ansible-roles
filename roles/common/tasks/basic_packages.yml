@@ -1,9 +1,5 @@
 ---
 - name:  Install basic packages
-  yum: name={{ item }} state=present
-  with_items: 
-    - mc
-    - links
-    - wget
-    - htop
-    - yum-utils
+  yum: 
+    name: ['mc', 'links', 'wget', 'htop', 'yum-utils'] 
+    state: present
