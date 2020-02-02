@@ -1,5 +1,11 @@
 ---
 - name:  Install webserver packages
-  yum: 
+  dnf: 
     name: ['httpd']
     state: present
+
+- name: Start and enable apache service
+  service: 
+    name: httpd 
+    state: started 
+    enabled: yes

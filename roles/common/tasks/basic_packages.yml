@@ -1,5 +1,5 @@
 ---
 - name:  Install basic packages
-  yum: 
-    name: ['mc', 'links', 'wget', 'htop', 'yum-utils'] 
+  dnf: 
+    name: ['mc', 'vim', 'wget', 'htop', 'dnf-utils', 'python3', 'net-tools'] 
     state: present

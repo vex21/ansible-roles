@@ -1,4 +1,17 @@
 ---
 
 - name: Upgrade all packages
-  package: name=* state=latest update_cache=yes
+  dnf:
+    name: "*"
+    state: latest
+
+- name: Check for reboot hint.
+  shell: LAST_KERNEL=$(rpm -q --last kernel | awk 'NR==1{sub(/kernel-/,""); print $1}'); CURRENT_KERNEL=$(uname -r); if [ $LAST_KERNEL != $CURRENT_KERNEL ]; then echo 'reboot'; else echo 'no'; fi
+  ignore_errors: true
+  register: reboot_hint
+
+# - debug: var=reboot_hint.stdout.find("reboot")
+
+- name: Restart server
+  reboot:
+  when: (reboot_hint.stdout.find("reboot") != -1) and (skip_unnecessary_steps != 1)
