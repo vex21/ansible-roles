@@ -1,5 +1,5 @@
 ---
 - name:  Install basic packages
   dnf: 
-    name: ['mc', 'vim', 'wget', 'htop', 'dnf-utils', 'python3', 'net-tools'] 
+    name: ['mc', 'vim', 'wget', 'htop', 'dnf-utils', 'python3', 'net-tools', 'tar'] 
     state: present
