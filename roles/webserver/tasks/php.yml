@@ -15,3 +15,9 @@
     name: php-fpm 
     state: started 
     enabled: yes
+
+
+- name: Restart service httpd so that it pick ups php
+  service:
+    name: httpd
+    state: restarted
