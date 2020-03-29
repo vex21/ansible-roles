@@ -14,4 +14,4 @@
 
 - name: Restart server
   reboot:
-  when: (reboot_hint.stdout.find("reboot") != -1) and (skip_unnecessary_steps != 1)
+  when: (reboot_hint.stdout.find("reboot") != -1) and (skip_unnecessary_steps is defined and skip_unnecessary_steps != 1)
