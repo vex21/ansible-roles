@@ -2,7 +2,7 @@
 
 - name: Install php modularity appstream 
   dnf:
-    name: '@php:remi-7.4'
+    name: '@php:remi-7.3'
     state: present
 
 - name:  Install php packages
