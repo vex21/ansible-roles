@@ -1,8 +1,8 @@
 ---
+
 - name:  Install EPEL repo
   dnf: 
     name:  epel-release 
-    name: "{{ epel_repo_url }}"
     state: present
 
 - name: Change EPEL priority
@@ -13,13 +13,13 @@
     value: '10'
     backup: no
 
-- name: Install remi repo.
-  dnf:
-    name: "{{ remi_repo_url }}"
-    state: present
-
 - name: Import remi GPG key.
   rpm_key:
     key: "{{ remi_repo_gpg_key_url }}"
+    state: present
+
+- name: Install remi repo.
+  dnf:
+    name: "{{ remi_repo_url }}"
     state: present
 
