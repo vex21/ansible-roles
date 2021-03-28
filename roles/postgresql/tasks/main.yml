@@ -6,7 +6,7 @@
     state: present
     disable_gpg_check: yes
 
-- name: disable default modular stream
+- name: Disable default modular stream
   command: dnf -qy module disable postgresql
 
 - name:  Install postgres packages
@@ -18,7 +18,7 @@
       - postgresql11-server
     state: present
 
-- name: disable default modular stream
+- name: Initialize the database
   command: /usr/pgsql-11/bin/postgresql-11-setup initdb
 
 - name: Start and enable postgres service
