@@ -1,0 +1,28 @@
+---
+
+- name: Install and enable postgres repository
+  dnf:
+    name: 'https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm' 
+    state: present
+    disable_gpg_check: yes
+
+- name: disable default modular stream
+  command: dnf -qy module disable postgresql
+
+- name:  Install postgres packages
+  dnf: 
+    name: 
+      - postgresql11-contrib
+      - postgresql11-devel
+      - postgresql11-libs
+      - postgresql11-server
+    state: present
+
+- name: disable default modular stream
+  command: /usr/pgsql-11/bin/postgresql-11-setup initdb
+
+- name: Start and enable postgres service
+  service: 
+    name: postgresql-11 
+    state: started 
+    enabled: yes
