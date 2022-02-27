@@ -18,8 +18,14 @@
       - postgresql11-server
     state: present
 
+- name: store the statistics of /var/lib/pgsql/11/data/PG_VERSION
+  stat:
+    path: /var/lib/pgsql/11/data/PG_VERSION
+  register: pg_data
+
 - name: Initialize the database
   command: /usr/pgsql-11/bin/postgresql-11-setup initdb
+  when: pg_data.stat.exists == false
 
 - name: Start and enable postgres service
   service: 

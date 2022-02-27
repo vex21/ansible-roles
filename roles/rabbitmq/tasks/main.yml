@@ -1,0 +1,55 @@
+---
+
+# based https://www.rabbitmq.com/install-rpm.html
+
+- name: Primary RabbitMQ signing key
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc
+
+- name: Modern Erlang repository key
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://packagecloud.io/rabbitmq/erlang/gpgkey
+
+- name: RabbitMQ server repository key
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey
+
+- name: Upload rabbitmq.repo
+  ansible.builtin.copy:
+    src: files/rabbitmq.repo
+    dest: /etc/yum.repos.d/rabbitmq.repo
+
+- name: Install socat and logrotate dependencies
+  dnf: 
+    name: 
+      - socat
+      - logrotate
+    state: present
+
+- name: Make cache manually
+  command: dnf -q makecache -y --disablerepo='*' --enablerepo='rabbitmq_erlang-noarch' --enablerepo='rabbitmq_server-noarch'
+
+- name: Install erlang and rabbitmq-server
+  command: dnf install -y --repo rabbitmq_erlang --repo rabbitmq_server-noarch erlang rabbitmq-server
+
+# Erlang epmd needs this to be able to resolve hostname to localhost
+- name: Add ansible_hostname to /etc/hosts ipv4 localhost
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.0\.1'
+    line: 127.0.0.1 {{ansible_hostname}}
+  
+- name: Add ansible_hostname to /etc/hosts ipv6 localhost
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^::1'
+    line: ::1 {{ansible_hostname}}
+
+- name: Start and enable rabbitmq service
+  service: 
+    name: rabbitmq-server 
+    state: started 
+    enabled: yes
