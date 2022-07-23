@@ -1,10 +1,5 @@
 ---
 
-- name: Install redis modularity appstream 
-  dnf:
-    name: '@redis:6'
-    state: present
-
 - name:  Install redis packages
   dnf: 
     name: 
