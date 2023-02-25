@@ -5,13 +5,37 @@
     name: "*"
     state: latest
 
-- name: Check for reboot hint.
-  shell: LAST_KERNEL=$(rpm -q --last kernel | awk 'NR==1{sub(/kernel-/,""); print $1}'); CURRENT_KERNEL=$(uname -r); if [ $LAST_KERNEL != $CURRENT_KERNEL ]; then echo 'reboot'; else echo 'no'; fi
-  ignore_errors: true
-  register: reboot_hint
+- name: Install yum-utils
+  dnf:
+    name: yum-utils
+    state: present
+  when: ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
 
-# - debug: var=reboot_hint.stdout.find("reboot")
+- name: Check for reboot hint on Centos/RH.
+  command: needs-restarting -r
+  check_mode: yes
+  when: ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+  register: reboot_hint_centos
+
+- name: Check for reboot hint on Debian.
+  stat:
+    path: /var/run/reboot-required
+  check_mode: yes
+  when: ansible_distribution == "Debian"
+  register: reboot_hint_debian
+
+# - debug: var=reboot_hint_centos.rc
+# - debug: var=reboot_hint_debian.stat.exists
 
 - name: Restart server
   reboot:
-  when: (reboot_hint.stdout.find("reboot") != -1) and (skip_unnecessary_steps is defined and skip_unnecessary_steps != 1)
+  when: > 
+    (
+        (reboot_hint_centos.rc is defined and reboot_hint_centos.rc == 1) 
+      or 
+        (reboot_hint_debian.stat.exists is defined and reboot_hint_debian.stat.exists == True)
+    ) 
+    and 
+    (
+      skip_unnecessary_steps is defined and skip_unnecessary_steps != 1
+    )
