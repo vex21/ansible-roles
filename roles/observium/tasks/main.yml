@@ -1,0 +1,35 @@
+---
+
+- name: Install snmpd packages
+  dnf: 
+    name: 
+      - net-snmp
+      - net-snmp-utils
+      - net-snmp-libs
+    state: present
+
+- name: "Make sure that the snmpd conf file doesn't contain the new observium username already"
+  lineinfile:
+    name: /etc/snmp/snmpd.conf
+    line: "rouser {{ observium_username }}"
+    state: present
+  check_mode: yes
+  register: observium_user_exists
+
+- name: Stop snmpd service in case it's running
+  service: 
+    name: snmpd 
+    state: stopped
+  when: observium_user_exists.changed == true
+
+- name: Create snmp user
+  ansible.builtin.command: net-snmp-create-v3-user -ro -a {{ observium_password }} -A SHA -x {{ observium_crypto }} -X AES {{ observium_username }}
+  when: observium_user_exists.changed == true
+
+- name: Start and enable snmpd service
+  service: 
+    name: snmpd 
+    state: started 
+    enabled: yes
+
+# TODO install observium agents
