@@ -5,6 +5,7 @@
     name:  epel-release 
     state: present
 
+#TODO move Remi repo to the php role
 - name: Import remi GPG key.
   rpm_key:
     key: "{{ remi_repo_gpg_key_url }}"
