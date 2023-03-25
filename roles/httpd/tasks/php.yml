@@ -1,5 +1,15 @@
 ---
 
+- name: Import remi GPG key.
+  rpm_key:
+    key: "{{ remi_repo_gpg_key_url }}"
+    state: present
+
+- name: Install remi repo.
+  dnf:
+    name: "{{ remi_repo_url }}"
+    state: present
+
 - name: Install php modularity appstream 
   dnf:
     name: '@php:remi-7.4'
