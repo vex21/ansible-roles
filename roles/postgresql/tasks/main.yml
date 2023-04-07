@@ -9,6 +9,10 @@
 - name: Disable default modular stream
   command: dnf -qy module disable postgresql
 
+# some perl dependencies have been moved to the powertools repo (for EL9, it would be the CRB repo) 
+- name: install the powertools repository
+  command: "dnf config-manager --set-enabled powertools"
+
 - name:  Install postgres packages
   dnf: 
     name: 
