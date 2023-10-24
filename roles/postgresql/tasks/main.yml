@@ -39,7 +39,7 @@
 
 - name: Upload pgsql_profile file (to include the correct PATH)
   copy: 
-    src: roles/postgresql/files/.pgsql_profile
+    src: .pgsql_profile
     dest: /var/lib/pgsql/.pgsql_profile
-    owner: postgresql
-    group: postgresql
+    owner: postgres
+    group: postgres
