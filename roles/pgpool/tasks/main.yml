@@ -1,0 +1,20 @@
+---
+
+- name: Install and enable pgpool repository
+  dnf:
+    name: 'https://www.pgpool.net/yum/rpms/4.4/redhat/rhel-8-x86_64/pgpool-II-release-4.4-1.noarch.rpm' 
+    state: present
+    disable_gpg_check: yes
+
+- name:  Install pgpool packages
+  dnf: 
+    name: 
+      - pgpool-II-pg15
+      - pgpool-II-pg15-extensions
+    state: present
+
+- name: Start and enable pgpool service
+  service: 
+    name: pgpool
+    state: started 
+    enabled: yes
