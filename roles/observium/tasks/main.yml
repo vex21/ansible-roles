@@ -33,3 +33,19 @@
     enabled: yes
 
 # TODO install observium agents
+
+- name: Upload observium_agent.socket
+  copy:
+    src: ./files/observium_agent.socket
+    dest: /etc/systemd/system/observium_agent.socket
+
+- name: Upload observium_agent@.service
+  copy:
+    src: ./files/observium_agent@.service
+    dest: /etc/systemd/system/observium_agent@.service
+
+- name: Start and enable observium agent socket
+  service:
+    name: observium_agent.socket
+    state: started
+    enabled: yes

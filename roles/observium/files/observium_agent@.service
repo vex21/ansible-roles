@@ -1,0 +1,8 @@
+[Unit]
+Description=Observium Agent Service
+
+[Service]
+ExecStart=-/usr/bin/observium_agent
+User=root
+Group=root
+StandardInput=socket
