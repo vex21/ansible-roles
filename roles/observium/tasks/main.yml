@@ -35,7 +35,7 @@
 - name: Download observium agent
   ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/DanielleHuisman/observium-community-edition/main/scripts/observium_agent
-    dest: /usr/lib/observium_agent
+    dest: /usr/bin/observium_agent
     mode: '0744'
 
 - name: Upload observium_agent.socket
