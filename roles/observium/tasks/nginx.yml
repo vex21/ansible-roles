@@ -1,0 +1,23 @@
+
+- name: Install python3
+  dnf:
+    name: python3
+    state: present
+  when: "'nginx' in ansible_facts.packages and ansible_os_family == 'RedHat'"
+
+- name: Select python 3 as the default
+  community.general.alternatives:
+    name: python
+    path: /usr/bin/python3
+    link: /usr/bin/python
+    state: selected
+  when: "'nginx' in ansible_facts.packages and ansible_os_family == 'RedHat'"
+
+- name: Download nginx agent
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/DanielleHuisman/observium-community-edition/main/scripts/agent-local/nginx
+    dest: /usr/lib/observium_agent/local/nginx
+    mode: '0744'
+  when: "'nginx' in ansible_facts.packages"
+
+# TODO add /nginx-status to nginx conf
