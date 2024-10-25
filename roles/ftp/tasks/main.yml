@@ -1,0 +1,13 @@
+---
+
+- name:  Install proftpd packages
+  dnf: 
+    name: 
+      - proftpd
+    state: present
+
+- name: Start and enable proftpd service
+  service: 
+    name: proftpd
+    state: started 
+    enabled: yes
