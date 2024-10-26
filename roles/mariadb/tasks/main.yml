@@ -10,9 +10,10 @@
     name: mariadb 
     state: started 
     enabled: yes
-  
+
+# needs: ansible-galaxy collection install community.mysql
 - name: Update mysql root password for all root accounts
-  mysql_user:
+  community.mysql.mysql_user:
     name: root
     host: "{{ item }}"
     password: "{{ mysql_root_password }}"

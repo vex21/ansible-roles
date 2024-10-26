@@ -1,5 +1,8 @@
 ---
 
+- name: Enable the crb repository
+  command: "dnf config-manager --set-enabled crb"
+
 - name:  Install proftpd packages
   dnf: 
     name: 

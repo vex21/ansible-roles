@@ -12,12 +12,12 @@
 
 - name: Install php modularity appstream 
   dnf:
-    name: '@php:remi-7.4'
+    name: '@php:remi-8.3'
     state: present
 
 - name:  Install php packages
   dnf: 
-    name: 'php, php-fpm, php-cli, php-common, php-gd, php-ldap, php-mbstring, php-mcrypt, php-mysql, php-mcrypt, php-pdo, php-pear, php-pecl-apc, php-process, php-xml'
+    name: 'php, php-fpm, php-cli, php-common, php-gd, php-ldap, php-mbstring, php-mcrypt, php-mysql, php-mcrypt, php-pdo, php-pear, php-process, php-xml'
     state: present
 
 - name: Start and enable php-fpm service
