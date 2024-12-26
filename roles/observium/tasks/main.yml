@@ -42,10 +42,24 @@
   ansible.builtin.command: net-snmp-config --create-snmpv3-user -ro -a {{ observium_password }} -A SHA -x {{ observium_crypto }} -X AES {{ observium_username }}
   when: observium_user_exists.changed == true and ansible_os_family == "Debian"
 
+- name: Update the agentAddress with external IP address
+  ansible.builtin.lineinfile:
+    path: /etc/snmp/snmpd.conf
+    regexp: '^agentaddress  127\.0\.0\.1,\[::1\]'
+    line: "agentaddress  127.0.0.1,[::1],{{ ansible_default_ipv4.address }}"
+  when: ansible_os_family == "Debian" and ansible_default_ipv6.address is not defined
+
+- name: Update the agentAddress with external IPv6 address
+  ansible.builtin.lineinfile:
+    path: /etc/snmp/snmpd.conf
+    regexp: '^agentaddress  127\.0\.0\.1,\[::1\]'
+    line: "agentaddress  127.0.0.1,[::1],{{ ansible_default_ipv4.address }},{{ ansible_default_ipv6.address }}"
+  when: ansible_os_family == "Debian" and ansible_default_ipv6.address is defined
+
 - name: Start and enable snmpd service
-  service: 
-    name: snmpd 
-    state: started 
+  service:
+    name: snmpd
+    state: started
     enabled: yes
 
 - name: Download observium agent
