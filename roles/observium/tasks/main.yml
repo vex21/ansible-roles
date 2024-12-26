@@ -1,6 +1,6 @@
 ---
 
-- name: Install snmpd packages
+- name: Install snmpd packages - Red Hat family
   dnf: 
     name: 
       - net-snmp
@@ -9,7 +9,7 @@
     state: present
   when: ansible_os_family == "RedHat"
 
-- name: Install snmpd packages
+- name: Install snmpd packages - Debian family
   apt:
     name:
       - snmp

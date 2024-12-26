@@ -1,5 +1,25 @@
 ---
-- name:  Install basic packages
-  dnf: 
-    name: ['mc', 'vim', 'wget', 'htop', 'dnf-utils', 'python3', 'net-tools', 'tar'] 
+
+- name: Install basic packages - Red Hat family
+  dnf:
+    name:
+      - mc
+      - vim
+      - wget
+      - htop
+      - dnf-utils
+      - python3
+      - net-tools
+      - tar
     state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Install basic packages - Debian family
+  apt:
+    name:
+      - mc
+      - vim
+      - wget
+      - htop
+    state: present
+  when: ansible_os_family == "Debian"
