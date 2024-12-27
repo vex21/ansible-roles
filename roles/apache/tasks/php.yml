@@ -1,0 +1,67 @@
+---
+
+- name: Import remi GPG key.
+  rpm_key:
+    key: "{{ remi_repo_gpg_key_url }}"
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Install remi repo.
+  dnf:
+    name: "{{ remi_repo_url }}"
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Install php modularity appstream 
+  dnf:
+    name: '@php:remi-8.3'
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name:  Install php packages
+  package:
+    name:
+      - php
+      - php-apcu
+      - php-cli
+      - php-common
+      - php-fpm
+      - php-gd
+      - php-intl
+      - php-ldap
+      - php-mbstring
+      - php-opcache
+      - php-pdo
+      - php-pear
+      - php-mcrypt
+      - php-mysql
+      - php-zip
+      - php-xml
+    state: present
+  register: php_installed
+
+- name: Start and enable php-fpm service
+  service: 
+    name: php-fpm 
+    state: started 
+    enabled: yes
+  when: ansible_os_family == "RedHat"
+
+- name: Start and enable php-fpm service - Debian
+  service:
+    name: php8.2-fpm
+    state: started
+    enabled: yes
+  when: ansible_os_family == "Debian"
+
+- name: Restart service httpd so that it pick ups php
+  service:
+    name: httpd
+    state: restarted
+  when: ansible_os_family == "RedHat" and php_installed.changed == true
+
+- name: Restart service Apache so that it pick ups php
+  service:
+    name: apache
+    state: restarted
+  when: ansible_os_family == "Debian" and php_installed.changed == true

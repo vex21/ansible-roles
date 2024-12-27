@@ -1,0 +1,28 @@
+---
+- name: Install webserver packages
+  dnf: 
+    name:
+      - httpd
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Start and enable apache service
+  service: 
+    name: httpd 
+    state: started 
+    enabled: yes
+  when: ansible_os_family == "RedHat"
+
+- name: Install webserver packages
+  apt:
+    name:
+      - apache2
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Start and enable apache service
+  service:
+    name: apache2
+    state: started
+    enabled: yes
+  when: ansible_os_family == "Debian"
