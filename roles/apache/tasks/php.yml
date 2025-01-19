@@ -62,6 +62,6 @@
 
 - name: Restart service Apache so that it pick ups php
   service:
-    name: apache
+    name: apache2
     state: restarted
   when: ansible_os_family == "Debian" and php_installed.changed == true

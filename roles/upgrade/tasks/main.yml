@@ -1,7 +1,12 @@
 ---
 
+- name: Run the equivalent of "apt-get update"
+  ansible.builtin.apt:
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+
 - name: Upgrade all packages
-  dnf:
+  package:
     name: "*"
     state: latest
 
@@ -9,19 +14,19 @@
   dnf:
     name: yum-utils
     state: present
-  when: ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+  when: ansible_os_family == "RedHat"
 
 - name: Check for reboot hint on Centos/RH.
   command: needs-restarting -r
   check_mode: yes
-  when: ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+  when: ansible_os_family == "RedHat"
   register: reboot_hint_centos
 
 - name: Check for reboot hint on Debian.
   stat:
     path: /var/run/reboot-required
   check_mode: yes
-  when: ansible_distribution == "Debian"
+  when: ansible_os_family == "Debian"
   register: reboot_hint_debian
 
 # - debug: var=reboot_hint_centos.rc
