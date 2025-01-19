@@ -1,0 +1,54 @@
+---
+
+#TODO make this idempotent
+- name: install the crb repository
+  command: "dnf config-manager --set-enabled crb"
+
+- name: Import remi GPG key.
+  rpm_key:
+    key: "{{ remi_repo_gpg_key_url }}"
+    state: present
+
+- name: Install epel repo.
+  dnf:
+    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+    state: present
+
+- name: Install remi repo.
+  dnf:
+    name: "http://rpms.remirepo.net/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm"
+    state: present
+
+- name:  Install php 8.3 packages
+  dnf:
+    name:
+        - php83
+        - php83-php-fpm
+        - php83-php-cli
+        - php83-php-common
+        - php83-php-fpm
+        - php83-php-gd
+        - php83-php-intl
+        - php83-php-json
+        - php83-php-ldap
+        - php83-php-mbstring
+        - php83-php-mysqlnd
+        - php83-php-opcache
+        - php83-php-pdo
+        - php83-php-pear
+        - php83-php-pecl-apcu
+        - php83-php-pecl-mcrypt
+        - php83-php-pecl-mysql
+        - php83-php-pecl-zip
+        - php83-php-pgsql
+        - php83-php-process
+        - php83-php-sodium
+        - php83-php-xml
+    state: present
+
+- name: Start and enable php-fpm service
+  service:
+    name: php83-php-fpm
+    state: started
+    enabled: yes
+
