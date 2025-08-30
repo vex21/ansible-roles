@@ -9,12 +9,18 @@
   package:
     name: "*"
     state: latest
+  when: ansible_os_family != "RedHat" and ansible_distribution_major_version != "8"
 
 - name: Install yum-utils
   dnf:
     name: yum-utils
     state: present
-  when: ansible_os_family == "RedHat"
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version != "8"
+
+# workaround for RH family major version 8 where ansible-core 2.18 requirements on python do not match the python3-dnf.noarch package version of python
+- name: Upgrade packages on RH-like machines version 8
+  command: "dnf -y upgrade"
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
 
 - name: Check for reboot hint on Centos/RH.
   command: needs-restarting -r
